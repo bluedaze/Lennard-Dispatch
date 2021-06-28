@@ -1,5 +1,5 @@
 #include "Dispatcher.h"
-NRFLite _radio;
+#include "DebugUtils.h"
 
     Dispatcher::Dispatcher(uint8_t RADIO_ID, uint8_t DESTINATION_RADIO_ID) {
       this->RADIO_ID = RADIO_ID;
@@ -7,36 +7,35 @@ NRFLite _radio;
     }
 
     void Dispatcher::broadCast(RadioPacket packets[], int numPackets){
-      Serial.println("Sending packets");
+      DEBUG_PRINTLN("Sending packets");
       this->packets = packets;
       this->numPackets = numPackets;
       createTransmission();
     }
 
     void Dispatcher::sendPacket(RadioPacket packet) {
-        Serial.print("\tSize of radio data: ");
-        Serial.println(sizeof(packet));
+        DEBUG_PRINT("\tSize of radio data: ");
+        DEBUG_PRINTLN(sizeof(packet));
         if (_radio.send(DESTINATION_RADIO_ID, &packet, sizeof(packet), NRFLite::NO_ACK)) {
-            Serial.println("\t...Success");
+            DEBUG_PRINT("\t...Success");
         } else {   
-            Serial.println("\t...Failed");
+            DEBUG_PRINT("\t...Failed");
         }
-        Serial.println();
+        DEBUG_PRINTLN();
     }
 
     void Dispatcher::createTransmission() {
       for(int i = 0; i < numPackets; i++) {
         RadioPacket packet = packets[i];
         packet.FromRadioId = RADIO_ID;
-        Serial.print("\tSending packet ");
-        Serial.print(i+1);
-        Serial.print(" of ");
-        Serial.print(numPackets);
-        Serial.println(".");
-        Serial.print("\tPacket contents: \"");
-        Serial.print(packet.Message);
-        Serial.println("\"");
+        DEBUG_PRINT("\tSending packet ");
+        DEBUG_PRINT(i+1);
+        DEBUG_PRINT(" of ");
+        DEBUG_PRINT(numPackets);
+        DEBUG_PRINTLN(".");
+        DEBUG_PRINT("\tPacket contents: \"");
+        DEBUG_PRINT(packet.Message);
+        DEBUG_PRINTLN("\"");
         sendPacket(packet);
         }
     }
-

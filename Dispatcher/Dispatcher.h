@@ -6,9 +6,11 @@
 
 #ifndef Dispatcher_h
 #define Dispatcher_h
+
 #include "Arduino.h"
 #include "RadioPacket.h"
 #include <NRFLite.h>
+
 extern NRFLite _radio;
 class Dispatcher {
 
